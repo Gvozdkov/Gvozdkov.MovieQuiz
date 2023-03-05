@@ -26,7 +26,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="8LM-61-c3L">
-                                <rect key="frame" x="20" y="58" width="374" height="824.5"/>
+                                <rect key="frame" x="20" y="58" width="374" height="824"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J7J-JW-8VB">
                                         <rect key="frame" x="0.0" y="0.0" width="374" height="23.5"/>
@@ -53,10 +53,10 @@
                                         </constraints>
                                     </imageView>
                                     <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="vCT-MT-nuU">
-                                        <rect key="frame" x="0.0" y="624.5" width="374" height="120"/>
+                                        <rect key="frame" x="0.0" y="624.5" width="374" height="119.5"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Рейтинг этого фильма меньше, чем 5?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Jb-ao-z0e" userLabel="Question Title">
-                                                <rect key="frame" x="42" y="13" width="290" height="94"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Рейтинг этого фильма меньше, чем 5?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Jb-ao-z0e" userLabel="Question Title">
+                                                <rect key="frame" x="42" y="13" width="290" height="93.5"/>
                                                 <fontDescription key="fontDescription" name="YSDisplay-Bold" family="YS Display" pointSize="23"/>
                                                 <color key="textColor" name="ypWhite"/>
                                                 <nil key="highlightedColor"/>
@@ -70,7 +70,7 @@
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="FMj-aS-K8j">
-                                        <rect key="frame" x="0.0" y="764.5" width="374" height="60"/>
+                                        <rect key="frame" x="0.0" y="764" width="374" height="60"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fv3-G3-1Ua" userLabel="noButton">
                                                 <rect key="frame" x="0.0" y="0.0" width="177" height="60"/>
@@ -86,6 +86,9 @@
                                                         <integer key="value" value="15"/>
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="noButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qnR-Pa-8KL"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dFP-gh-Liw" userLabel="yesButton">
                                                 <rect key="frame" x="197" y="0.0" width="177" height="60"/>
@@ -104,6 +107,9 @@
                                                         <integer key="value" value="15"/>
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="yesButtonClickd:" destination="BYZ-38-t0r" eventType="touchUpInside" id="a5u-5i-khE"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
@@ -118,6 +124,13 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="8LM-61-c3L" secondAttribute="trailing" constant="20" id="cqg-OA-32C"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="counterLabel" destination="aX5-9I-WtN" id="7he-4k-0W0"/>
+                        <outlet property="imageView" destination="eyo-Hz-yOl" id="Wfz-Fi-wyh"/>
+                        <outlet property="nuButton" destination="Fv3-G3-1Ua" id="liJ-zH-uLd"/>
+                        <outlet property="textLabel" destination="0Jb-ao-z0e" id="UFT-LS-PqB"/>
+                        <outlet property="yesButton" destination="dFP-gh-Liw" id="uzz-nG-j9T"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
