@@ -143,7 +143,7 @@ final class MovieQuizViewController: UIViewController {
     private func showAnswerResult(isCorrect: Bool) {           // здесь показываем результат ответа в виде рамки зеленой или красной
         imageView.layer.masksToBounds = true                   // даём разрешение на рисование рамки
         imageView.layer.borderWidth = 8                        // толщина рамки
-        imageView.layer.cornerRadius = 6                       // радиус скругления углов рамки
+        imageView.layer.cornerRadius = 20                       // радиус скругления углов рамки
 
         if isCorrect == true {
             imageView.layer.borderColor = UIColor.ypGreen.cgColor
