@@ -101,21 +101,21 @@ final class MovieQuizViewController: UIViewController {
         record.insert(num)
         return record.max() ?? 0
     }
-   
+    
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {    // тут конвертируем информацию для экрана в состояние "Вопрос задан"
-    return QuizStepViewModel(
-        image: UIImage(named: model.image) ?? UIImage(),
-        question: model.text,
-        questionNumber: "\(currentQuestionIndex + 1)/\(questions.count)")
-      }
+        return QuizStepViewModel(
+            image: UIImage(named: model.image) ?? UIImage(),
+            question: model.text,
+            questionNumber: "\(currentQuestionIndex + 1)/\(questions.count)")
+    }
     
-
+    
     private func show(quiz step: QuizStepViewModel) {           // здесь мы заполняем нашу картинку, текст и счётчик данными
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
-
+        
     }
     
     
@@ -144,7 +144,7 @@ final class MovieQuizViewController: UIViewController {
         imageView.layer.masksToBounds = true                   // даём разрешение на рисование рамки
         imageView.layer.borderWidth = 8                        // толщина рамки
         imageView.layer.cornerRadius = 20                       // радиус скругления углов рамки
-
+        
         if isCorrect == true {
             imageView.layer.borderColor = UIColor.ypGreen.cgColor
             correctAnswers += 1
@@ -165,23 +165,27 @@ final class MovieQuizViewController: UIViewController {
     
     
     private func showNextQuestionOrResults() {
-     if currentQuestionIndex == questions.count - 1 {
-         showResultQuiz()                                               // показать результат квиза
-      } else {
-        currentQuestionIndex += 1                                       // увеличиваем индекс текущего урока на 1; таким образом мы сможем получить следующий урок
-          show(quiz: convert(model: questions[currentQuestionIndex]))   // показать следующий вопрос
-      }
+        if currentQuestionIndex == questions.count - 1 {
+            showResultQuiz()                                               // показать результат квиза
+        } else {
+            currentQuestionIndex += 1                                      // увеличиваем индекс текущего урока на 1; таким образом мы сможем получить следующий урок
+            show(quiz: convert(model: questions[currentQuestionIndex]))    // показать следующий вопрос
+        }
     }
+    
+    
     
     
     @IBAction private func noButtonClicked(_ sender: Any) {
         let answer: Bool = false
         let answerTheQuestion = questions[currentQuestionIndex]
         showAnswerResult(isCorrect: answer == answerTheQuestion.correctAnswer)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {         // задержка вывода в 1 секунду
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in        // задержка вывода в 1 секунду. Делаем слабую ссылку и распаковываем через guard
+            guard let self = self else { return }
             self.showNextQuestionOrResults()
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in        // задержка вывода в 1 секунду
+            guard let self = self else { return }
             self.blockShowAnswerResult()
         }
     }
@@ -191,10 +195,12 @@ final class MovieQuizViewController: UIViewController {
         let answer: Bool = true
         let answerTheQuestion = questions[currentQuestionIndex]
         showAnswerResult(isCorrect: answer == answerTheQuestion.correctAnswer)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self = self else { return }
             self.showNextQuestionOrResults()
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self = self else { return }
             self.blockShowAnswerResult()
         }
     }
