@@ -10,42 +10,27 @@ final class MovieQuizViewController: UIViewController {
     @IBOutlet private var nuButton: UIButton!
     @IBOutlet private var yesButton: UIButton!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        show(quiz: convert(model: questions[currentQuestionIndex]))
-    }
-    
-    
     private var currentQuestionIndex: Int = 0
+    
+    private let questionsAmount: Int =  10                              // общее количество вопросов для квиза
+    private let questionFactory: QuestionFactory = QuestionFactory()    // та самая фабрика вопросов, которую мы создали. Наш контроллер будет обращаться за вопросами именно к ней.
+    private var currentQuestion: QuizQuestion?                          // текущий вопрос, который видит пользователь.
+    
     private var correctAnswers: Int = 0
     private var rightAnswer: Int = 0
     private var numberOfGames: Int = 1
     private var record = Set<Int>()
     
-    
-    private struct QuizStepViewModel {                          // для состояния "Вопрос задан"
-      let image: UIImage
-      let question: String
-      let questionNumber: String
+    override func viewDidLoad() {
+        super.viewDidLoad()
+//        show(quiz: convert(model: questions[currentQuestionIndex]))
+        if let firstQuestion = questionFactory.requestNextQuestion() {
+            currentQuestion = firstQuestion
+            let viewModel = convert(model: firstQuestion)
+            show(quiz: viewModel)
+        }
     }
 
-    
-    private struct QuizResultsViewModel {                       // для состояния "Результат квиза"
-      let title: String
-      let text: String
-      let buttonText: String
-    }
-    
-        
-    private struct QuizQuestion {                               // для информации на экране
-      let image: String
-      let text: String
-      let correctAnswer: Bool
-    }
-
-    
-   
-    
     
     private func date() -> String {
         let date = Date()
@@ -62,11 +47,11 @@ final class MovieQuizViewController: UIViewController {
     }
     
     
-    private func convert(model: QuizQuestion) -> QuizStepViewModel {    // тут конвертируем информацию для экрана в состояние "Вопрос задан"
+    func convert(model: QuizQuestion) -> QuizStepViewModel {    // тут конвертируем информацию для экрана в состояние "Вопрос задан"
         return QuizStepViewModel(
             image: UIImage(named: model.image) ?? UIImage(),
             question: model.text,
-            questionNumber: "\(currentQuestionIndex + 1)/\(questions.count)")
+            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
     }
     
     
@@ -88,9 +73,14 @@ final class MovieQuizViewController: UIViewController {
             self.numberOfGames += 1
             self.currentQuestionIndex = 0
                                                                 // заново показываем первый вопрос
-            let firstQuestion = self.questions[self.currentQuestionIndex]
-            let viewModel = self.convert(model: firstQuestion)
-            self.show(quiz: viewModel)
+//            let firstQuestion = self.questions[self.currentQuestionIndex]
+//            let viewModel = self.convert(model: firstQuestion)
+//            self.show(quiz: viewModel)
+            if let firstQuestion = self.questionFactory.requestNextQuestion() {
+                self.currentQuestion = firstQuestion
+                let viewModel = self.convert(model: firstQuestion)
+                self.show(quiz: viewModel)
+            }
             self.rightAnswer = 0
         }
         
@@ -124,11 +114,17 @@ final class MovieQuizViewController: UIViewController {
     
     
     private func showNextQuestionOrResults() {
-        if currentQuestionIndex == questions.count - 1 {
+        if currentQuestionIndex == questionsAmount - 1 {
             showResultQuiz()                                               // показать результат квиза
         } else {
             currentQuestionIndex += 1                                      // увеличиваем индекс текущего урока на 1; таким образом мы сможем получить следующий урок
-            show(quiz: convert(model: questions[currentQuestionIndex]))    // показать следующий вопрос
+//            show(quiz: convert(model: questions[currentQuestionIndex]))    // показать следующий вопрос
+            if let firstQuestion = self.questionFactory.requestNextQuestion() {
+                self.currentQuestion = firstQuestion
+                let viewModel = self.convert(model: firstQuestion)
+                
+                self.show(quiz: viewModel)
+            }
         }
     }
     
@@ -137,7 +133,10 @@ final class MovieQuizViewController: UIViewController {
     
     @IBAction private func noButtonClicked(_ sender: Any) {
         let answer: Bool = false
-        let answerTheQuestion = questions[currentQuestionIndex]
+//        let answerTheQuestion = questions[currentQuestionIndex]
+        guard let answerTheQuestion = currentQuestion else {
+            return
+        }
         showAnswerResult(isCorrect: answer == answerTheQuestion.correctAnswer)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in        // задержка вывода в 1 секунду. Делаем слабую ссылку и распаковываем через guard
             guard let self = self else { return }
@@ -152,7 +151,10 @@ final class MovieQuizViewController: UIViewController {
     
     @IBAction private func yesButtonClickd(_ sender: Any) {
         let answer: Bool = true
-        let answerTheQuestion = questions[currentQuestionIndex]
+//        let answerTheQuestion = questions[currentQuestionIndex]
+        guard let answerTheQuestion = currentQuestion else {
+            return
+        }
         showAnswerResult(isCorrect: answer == answerTheQuestion.correctAnswer)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
