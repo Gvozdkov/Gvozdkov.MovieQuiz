@@ -5,10 +5,11 @@
 //  Created by Алексей Гвоздков on 13.03.2023.
 //
 
-import Foundation
+import UIKit
 
-class QuestionFactory {
-    private let questions: [QuizQuestion] = [
+class QuestionFactory: QuestionFactoryProtocol {
+    
+     let questions: [QuizQuestion] = [
             QuizQuestion(
                 image: "The Godfather",
                 text: "Рейтинг этого фильма больше чем 6?",
@@ -51,10 +52,19 @@ class QuestionFactory {
                 correctAnswer: false)
         ]
     
-    func requestNextQuestion() -> QuizQuestion? {
+    weak var delegate: QuestionFactoryDelegate?
+
+    init(delegate: QuestionFactoryDelegate) {
+        self.delegate = delegate
+    }
+    
+    func requestNextQuestion() {
         guard let index = (0..<questions.count).randomElement() else {          // рандом с выбором вопроса
-            return nil
+            delegate?.didReceiveNextQuestion(question: nil)
+            return
         }
-        return questions[safe: index]
+        
+        let question = questions[safe: index]
+        delegate?.didReceiveNextQuestion(question: question)
     }
 }
