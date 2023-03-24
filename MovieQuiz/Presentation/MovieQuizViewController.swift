@@ -12,15 +12,16 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     //MARK: - Private Properties
     private var rightAnswer: Int = 0
     private var currentQuestionIndex: Int = 0
-    private var numberOfGames: Int = 1
+//    private var numberOfGames: Int = 1
     private var vrem = AlertPresenter.showAlert
-    private var record = Set<Int>()
+//    private var record = Set<Int>()
     
     private let questionsAmount: Int =  10                       // общее количество вопросов для квиза
     private var correctAnswers: Int = 0                          // правельные ответы
     
     private var currentQuestion: QuizQuestion?                    // текущий вопрос, который видит пользователь.
     private let alertPresenter = AlertPresenter()
+    private var statisticService: StatisticService?
     private var questionFactory: QuestionFactoryProtocol?        // та самая фабрика вопросов, которую мы создали. Наш                                                                   контроллер будет обращаться за вопросами именно к ней.
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -29,11 +30,14 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let fileName = "inception.json"
         documentsURL.appendPathComponent(fileName)
-        let jsonString = try? String(contentsOf: documentsURL)
+        
+        statisticService = StatisticServiceImplementation()
         
         questionFactory = QuestionFactory(delegate: self)
-        questionFactory?.requestNextQuestion()
+ 
         alertPresenter.viewController = self
+        questionFactory?.requestNextQuestion()
+
     }
     
     // MARK: - QuestionFactoryDelegate
@@ -49,11 +53,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     // MARK: - Private methods
-    func reset() {
-        currentQuestionIndex = 0
-        correctAnswers = 0
-        numberOfGames = 1
-    }
+//    func reset() {
+//        currentQuestionIndex = 0
+//        correctAnswers = 0
+//        numberOfGames = 1
+//    }
     
     
    private func date() -> String {
@@ -64,10 +68,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
        return now
     }
 
-    private func gameRecord(num: Int) -> Int {
-       record.insert(num)
-       return record.max() ?? 0
-    }
+//    private func gameRecord(num: Int) -> Int {
+//       record.insert(num)
+//       return record.max() ?? 0
+//    }
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {    // тут конвертируем информацию для экрана в состояние "Вопрос задан"
         return QuizStepViewModel(
@@ -112,25 +116,40 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         imageView.layer.borderWidth = 0
 
         if currentQuestionIndex == questionsAmount - 1 {
+           
+            guard let statisticService = statisticService else { return }
+
+            statisticService.store(correct: correctAnswers, total: questionsAmount)
+            let accurancyProcentage = "\(String(format: "%.2f", statisticService.totalAccuracy))%"
+            let bestGameDate = statisticService.bestGame.date.dateTimeString
+            let totalGamesCount = statisticService.gamesCount
+            let currentCorrectRecord = statisticService.bestGame.correct
+            let currentTotalRecord = statisticService.bestGame.total
             
             let titleText = "Этот раунд окончен!"
             let massageText = """
                 Ваш результат: \(rightAnswer)/\(questionsAmount)
-                Количество сыгранных квизов: \(numberOfGames)
-                Рекорд: \(gameRecord(num: rightAnswer))/10 (\(date()))
-                Средняя точность: \(rightAnswer * 10).00%
+                Количество сыгранных квизов: \(totalGamesCount)
+                Рекорд: \(currentCorrectRecord)/\(currentTotalRecord) (\(bestGameDate))
+                Средняя точность: \(accurancyProcentage)
                 """
-            let buttonText = "Сыграть еще раз"
+            //Рекорд: \(gameRecord(num: rightAnswer))/10 (\(date()))
+            let buttonText = "Cыграть еще раз"
             
             
             let viewModel = AlertModel(title: titleText,
                                        message: massageText,
                                        buttonText: buttonText) { [weak self] in
+                self?.currentQuestionIndex = 0
+                self?.correctAnswers = 0
+                self?.rightAnswer = 0 
+                
+                self?.questionFactory?.requestNextQuestion()
 //                self?.currentQuestionIndex = 1
 //                self?.correctAnswers = 0
-                self?.rightAnswer = 0
-                self?.numberOfGames = 1
-                //                self?.questionFactory?.requestNextQuestion()
+//                                self?.rightAnswer = 0
+//                                self?.numberOfGames = 1
+//                self?.questionFactory?.requestNextQuestion()
             }
             showQuizAlert(quiz: viewModel)
         } else {
