@@ -10,12 +10,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private var yesButton: UIButton!
 
     //MARK: - Private Properties
-    private var rightAnswer: Int = 0
     private var currentQuestionIndex: Int = 0
-//    private var numberOfGames: Int = 1
-    private var vrem = AlertPresenter.showAlert
-//    private var record = Set<Int>()
-    
     private let questionsAmount: Int =  10                       // общее количество вопросов для квиза
     private var correctAnswers: Int = 0                          // правельные ответы
     
@@ -36,6 +31,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         questionFactory = QuestionFactory(delegate: self)
  
         alertPresenter.viewController = self
+        
         questionFactory?.requestNextQuestion()
 
     }
@@ -53,13 +49,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     // MARK: - Private methods
-//    func reset() {
-//        currentQuestionIndex = 0
-//        correctAnswers = 0
-//        numberOfGames = 1
-//    }
-    
-    
+
    private func date() -> String {
        let date = Date()
        let currentDate = DateFormatter()
@@ -68,10 +58,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
        return now
     }
 
-//    private func gameRecord(num: Int) -> Int {
-//       record.insert(num)
-//       return record.max() ?? 0
-//    }
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {    // тут конвертируем информацию для экрана в состояние "Вопрос задан"
         return QuizStepViewModel(
@@ -87,6 +73,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         counterLabel.text = step.questionNumber
     }
     
+    
     private func showAnswerResult(isCorrect: Bool) {           // здесь показываем результат ответа в виде рамки зеленой или красной
         imageView.layer.masksToBounds = true                   // даём разрешение на рисование рамки
         imageView.layer.borderWidth = 8                        // толщина рамки
@@ -95,7 +82,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         if isCorrect == true {
             imageView.layer.borderColor = UIColor.ypGreen.cgColor
             correctAnswers += 1
-            rightAnswer += 1
         } else {
             imageView.layer.borderColor = UIColor.ypRed.cgColor
         }
@@ -128,12 +114,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             
             let titleText = "Этот раунд окончен!"
             let massageText = """
-                Ваш результат: \(rightAnswer)/\(questionsAmount)
+                Ваш результат: \(correctAnswers)/\(questionsAmount)
                 Количество сыгранных квизов: \(totalGamesCount)
                 Рекорд: \(currentCorrectRecord)/\(currentTotalRecord) (\(bestGameDate))
                 Средняя точность: \(accurancyProcentage)
                 """
-            //Рекорд: \(gameRecord(num: rightAnswer))/10 (\(date()))
             let buttonText = "Cыграть еще раз"
             
             
@@ -142,14 +127,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                                        buttonText: buttonText) { [weak self] in
                 self?.currentQuestionIndex = 0
                 self?.correctAnswers = 0
-                self?.rightAnswer = 0 
                 
                 self?.questionFactory?.requestNextQuestion()
-//                self?.currentQuestionIndex = 1
-//                self?.correctAnswers = 0
-//                                self?.rightAnswer = 0
-//                                self?.numberOfGames = 1
-//                self?.questionFactory?.requestNextQuestion()
             }
             showQuizAlert(quiz: viewModel)
         } else {
