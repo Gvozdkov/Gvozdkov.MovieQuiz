@@ -25,8 +25,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let fileName = "inception.json"
+        documentsURL.appendPathComponent(fileName)
+        let jsonString = try? String(contentsOf: documentsURL)
+        
         questionFactory = QuestionFactory(delegate: self)
         questionFactory?.requestNextQuestion()
+        alertPresenter.viewController = self
     }
     
     // MARK: - QuestionFactoryDelegate
@@ -42,9 +49,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     // MARK: - Private methods
-    private func reset() {
-        self.numberOfGames += 1
-        self.currentQuestionIndex = 0
+    func reset() {
+        currentQuestionIndex = 0
+        correctAnswers = 0
+        numberOfGames = 1
     }
     
     
@@ -107,7 +115,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             
             let titleText = "Этот раунд окончен!"
             let massageText = """
-                Ваш результат: \(rightAnswer)/10
+                Ваш результат: \(rightAnswer)/\(questionsAmount)
                 Количество сыгранных квизов: \(numberOfGames)
                 Рекорд: \(gameRecord(num: rightAnswer))/10 (\(date()))
                 Средняя точность: \(rightAnswer * 10).00%
@@ -118,20 +126,18 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             let viewModel = AlertModel(title: titleText,
                                        message: massageText,
                                        buttonText: buttonText) { [weak self] in
-                self?.currentQuestionIndex = 0
-                self?.correctAnswers = 0
-                
-                self?.questionFactory?.requestNextQuestion()
+//                self?.currentQuestionIndex = 1
+//                self?.correctAnswers = 0
+                self?.rightAnswer = 0
+                self?.numberOfGames = 1
+                //                self?.questionFactory?.requestNextQuestion()
             }
-//            reset()
             showQuizAlert(quiz: viewModel)
-            print("test - Ya tut!")
         } else {
             currentQuestionIndex += 1
             questionFactory?.requestNextQuestion()
         }
     }
-    
     // MARK: - IBActions
             
     @IBAction private func noButtonClicked(_ sender: Any) {
