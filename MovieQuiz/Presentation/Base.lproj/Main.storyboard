@@ -122,16 +122,22 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="vIu-gJ-gwC">
+                                <rect key="frame" x="197" y="438" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="ypBlack"/>
                         <constraints>
+                            <constraint firstItem="vIu-gJ-gwC" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="3H3-go-hJg"/>
+                            <constraint firstItem="vIu-gJ-gwC" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Cp3-n1-WI3"/>
                             <constraint firstItem="8LM-61-c3L" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="Pbg-5b-jsp"/>
                             <constraint firstItem="8LM-61-c3L" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="SlY-r2-0Q2"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="8LM-61-c3L" secondAttribute="trailing" constant="20" id="cqg-OA-32C"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="vIu-gJ-gwC" id="YY1-fL-sHx"/>
                         <outlet property="counterLabel" destination="aX5-9I-WtN" id="7he-4k-0W0"/>
                         <outlet property="imageView" destination="eyo-Hz-yOl" id="Wfz-Fi-wyh"/>
                         <outlet property="nuButton" destination="Fv3-G3-1Ua" id="liJ-zH-uLd"/>
