@@ -9,7 +9,7 @@ import Foundation
 
 struct MostPopularMovies: Codable {
     let errorMassage: String
-    let items: [MostPopularMovies]
+    let items: [MostPopularMovie]
 }
 
 struct MostPopularMovie: Codable {
