@@ -13,6 +13,15 @@ private enum Keys: String {
 
 final class StatisticServiceImplementation: StatisticService {
     private let userDefaults = UserDefaults.standard
+    
+    private var correct: Double {
+        get {
+            userDefaults.double(forKey: Keys.correct.rawValue)
+        }
+        set {
+            userDefaults.set(newValue, forKey: Keys.correct.rawValue)
+        }
+    }
 
     private var total: Double {
         get {
@@ -23,32 +32,6 @@ final class StatisticServiceImplementation: StatisticService {
         }
     }
     
-    private var correct: Double {
-        get {
-            userDefaults.double(forKey: Keys.correct.rawValue)
-        }
-        set {
-            userDefaults.set(newValue, forKey: Keys.correct.rawValue)
-        }
-    }
-    
-    var totalAccuracy: Double {
-        get {
-            total == 0
-            ? 0
-            : correct / total * 100
-        }
-    }
-
-    var gamesCount: Int {
-        get {
-            userDefaults.integer(forKey: Keys.gamesCount.rawValue)
-        }
-        set {
-            userDefaults.set(newValue, forKey: Keys.gamesCount.rawValue)
-        }
-    }
-
     var bestGame: GameRecord {
         get {
             guard let data = userDefaults.data(forKey: Keys.bestGame.rawValue),
@@ -63,6 +46,23 @@ final class StatisticServiceImplementation: StatisticService {
                 return
             }
             userDefaults.set(data, forKey: Keys.bestGame.rawValue)
+        }
+    }
+    
+    var gamesCount: Int {
+        get {
+            userDefaults.integer(forKey: Keys.gamesCount.rawValue)
+        }
+        set {
+            userDefaults.set(newValue, forKey: Keys.gamesCount.rawValue)
+        }
+    }
+    
+    var totalAccuracy: Double {
+        get {
+            total == 0
+            ? 0
+            : correct / total * 100
         }
     }
 

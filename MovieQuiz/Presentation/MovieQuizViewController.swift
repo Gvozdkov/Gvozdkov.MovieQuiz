@@ -22,21 +22,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-//        var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-//        let fileName = "inception.json"
-//        documentsURL.appendPathComponent(fileName)
-//        statisticService = StatisticServiceImplementation()
-//        questionFactory = QuestionFactory(delegate: self)
- 
-        alertPresenter.viewController = self
-        
-        questionFactory?.requestNextQuestion()
+
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
+        questionFactory?.requestNextQuestion()
+        alertPresenter.viewController = self
         statisticService = StatisticServiceImplementation()
         
         showLoadingIndicator()
         questionFactory?.loadData()
+
     }
     
     // MARK: - QuestionFactoryDelegate
@@ -44,22 +38,25 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         guard let question = question else {
             return
         }
+        
         currentQuestion = question
         let viewModel = convert(model: question)
+        
         DispatchQueue.main.async { [weak self] in
             self?.show(quiz: viewModel)
         }
     }
     
-    // MARK: - Private methods
     func didLoadDataFromServer() {
-        activityIndicator.isHidden = true // скрываем индикатор загрузки
+        activityIndicator.isHidden = true
         questionFactory?.requestNextQuestion()
     }
-
+    
     func didFailToLoadData(with error: Error) {
-        showNetworkError(message: error.localizedDescription) // возьмём в качестве сообщения описание ошибки
+        showNetworkError(message: error.localizedDescription)
     }
+    
+    // MARK: - Private methods
     
     private func showLoadingIndicator() {
         activityIndicator.isHidden = false // говорим, что индикатор загрузки не скрыт
@@ -81,20 +78,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                 
                 self.currentQuestionIndex = 0
                 self.correctAnswers = 0
-                
                 self.questionFactory?.requestNextQuestion()
         }
         alertPresenter.showAlert(model: model)
     } 
-    
-   private func date() -> String {
-       let date = Date()
-       let currentDate = DateFormatter()
-       currentDate.dateFormat = "dd.MM.yy hh:mm"
-       let now = currentDate.string(from: date)
-       return now
-    }
-
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {    // тут конвертируем информацию для экрана в состояние "Вопрос задан"
         return QuizStepViewModel(
