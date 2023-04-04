@@ -56,6 +56,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         showNetworkError(message: error.localizedDescription)
     }
     
+
     // MARK: - Private methods
     
     private func showLoadingIndicator() {
@@ -200,3 +201,4 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
 }
+
