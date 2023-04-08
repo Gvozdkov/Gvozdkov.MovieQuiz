@@ -8,7 +8,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private var counterLabel: UILabel!
     @IBOutlet private var nuButton: UIButton!
     @IBOutlet private var yesButton: UIButton!
-
+    @IBOutlet var activityIndicator: UIActivityIndicatorView!
+    
     //MARK: - Private Properties
     private var currentQuestionIndex: Int = 0
     private let questionsAmount: Int =  10                       // общее количество вопросов для квиза
@@ -21,18 +22,14 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let fileName = "inception.json"
-        documentsURL.appendPathComponent(fileName)
-        
+
+        questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
+        questionFactory?.requestNextQuestion()
+        alertPresenter.viewController = self
         statisticService = StatisticServiceImplementation()
         
-        questionFactory = QuestionFactory(delegate: self)
- 
-        alertPresenter.viewController = self
-        
-        questionFactory?.requestNextQuestion()
+        showLoadingIndicator()
+        questionFactory?.loadData()
 
     }
     
@@ -41,27 +38,55 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         guard let question = question else {
             return
         }
+        
         currentQuestion = question
         let viewModel = convert(model: question)
+        
         DispatchQueue.main.async { [weak self] in
             self?.show(quiz: viewModel)
         }
     }
     
-    // MARK: - Private methods
-
-   private func date() -> String {
-       let date = Date()
-       let currentDate = DateFormatter()
-       currentDate.dateFormat = "dd.MM.yy hh:mm"
-       let now = currentDate.string(from: date)
-       return now
+    func didLoadDataFromServer() {
+        activityIndicator.isHidden = true
+        questionFactory?.requestNextQuestion()
     }
+    
+    func didFailToLoadData(with error: Error) {
+        showNetworkError(message: error.localizedDescription)
+    }
+    
 
+    // MARK: - Private methods
+    
+    private func showLoadingIndicator() {
+        activityIndicator.isHidden = false // говорим, что индикатор загрузки не скрыт
+        activityIndicator.startAnimating() // включили анимацию
+    }
+    
+    private func hideLoadingIndicator() {
+        activityIndicator.isHidden = true
+    }
+    
+    private func showNetworkError(message: String) {
+        hideLoadingIndicator() // скрываем индикатор загрузки
+        
+
+            let model = AlertModel(title: "Ошибка",
+                                   message: message,
+                                   buttonText: "Попробывать еще раз") { [weak self] in
+                guard let self = self else { return }
+                
+                self.currentQuestionIndex = 0
+                self.correctAnswers = 0
+                self.questionFactory?.requestNextQuestion()
+        }
+        alertPresenter.showAlert(model: model)
+    } 
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {    // тут конвертируем информацию для экрана в состояние "Вопрос задан"
         return QuizStepViewModel(
-            image: UIImage(named: model.image) ?? UIImage(),
+            image: UIImage(data: model.image) ?? UIImage(),
             question: model.text,
             questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
     }
@@ -176,3 +201,4 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
 }
+
