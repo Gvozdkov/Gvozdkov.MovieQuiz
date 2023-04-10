@@ -8,7 +8,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private var counterLabel: UILabel!
     @IBOutlet private var nuButton: UIButton!
     @IBOutlet private var yesButton: UIButton!
-    @IBOutlet var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet private var activityIndicator: UIActivityIndicatorView!
    
     
     //MARK: - Private Properties
@@ -79,12 +79,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 
             let model = AlertModel(title: "Ошибка",
                                    message: message,
-                                   buttonText: "Попробывать еще раз") { [weak self] in
+                                   buttonText: "Попробовать еще раз") { [weak self] in
                 guard let self = self else { return }
                 
                 self.currentQuestionIndex = 0
                 self.correctAnswers = 0
-                self.questionFactory?.requestNextQuestion()
+                self.questionFactory?.loadData()
+// !!! должна происходить загрузкас сервера               self.questionFactory?.requestNextQuestion()
         }
         alertPresenter.showAlert(model: model)
     } 
