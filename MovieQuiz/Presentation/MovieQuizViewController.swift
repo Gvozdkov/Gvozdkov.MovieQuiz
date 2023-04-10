@@ -9,6 +9,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private var nuButton: UIButton!
     @IBOutlet private var yesButton: UIButton!
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
+   
     
     //MARK: - Private Properties
     private var currentQuestionIndex: Int = 0
@@ -22,7 +23,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         questionFactory?.requestNextQuestion()
         alertPresenter.viewController = self
@@ -58,6 +59,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
 
     // MARK: - Private methods
+    override var preferredStatusBarStyle: UIStatusBarStyle {  //изменение цвета статус бара
+        return .lightContent
+    }
+    
     
     private func showLoadingIndicator() {
         activityIndicator.isHidden = false // говорим, что индикатор загрузки не скрыт
