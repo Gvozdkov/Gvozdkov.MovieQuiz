@@ -96,7 +96,7 @@ class QuestionFactory: QuestionFactoryProtocol {
             let rating = Float(movie.rating) ?? 0 // превращаем строку в число
             let randomNumber = Float.random(in: 4...9)
             
-            let text = "Рейтинг этого фильма больше чем \(Int(randomNumber))?"
+            let text = "Рейтинг этого фильма \nбольше чем \(Int(randomNumber))?"
             let correctAnswer = rating > randomNumber
             
             let question = QuizQuestion(image: imageData,
@@ -107,6 +107,7 @@ class QuestionFactory: QuestionFactoryProtocol {
                 guard let self = self else { return }
                 self.delegate?.didReceiveNextQuestion(question: question)
             }
+            
         }
     }
 }
