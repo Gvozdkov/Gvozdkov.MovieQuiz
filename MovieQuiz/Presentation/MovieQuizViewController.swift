@@ -25,6 +25,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        returnOnInternetQuestionsLoad()
+        
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         questionFactory?.requestNextQuestion()
         alertPresenter.viewController = self
@@ -87,7 +89,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                 self.currentQuestionIndex = 0
                 self.correctAnswers = 0
                 self.questionFactory?.loadData()
-// !!! должна происходить загрузкас сервера               self.questionFactory?.requestNextQuestion()
         }
         alertPresenter.showAlert(model: model)
     } 
@@ -169,6 +170,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             questionFactory?.requestNextQuestion()
         }
     }
+    
+
+    private func returnOnInternetQuestionsLoad() {
+        if questionFactory == nil { showLoadingIndicator() }
+        else { hideLoadingIndicator() }
+    }
     // MARK: - IBActions
             
     @IBAction private func noButtonClicked(_ sender: Any) {
@@ -190,10 +197,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private func showQuizAlert(quiz model: AlertModel) {
         alertPresenter.showAlert(model: model)
     }
-    
-//    @IBAction private func noButtonClicked(_ sender: Any) {
-//
-//    }
     
     
     @IBAction private func yesButtonClickd(_ sender: Any) {

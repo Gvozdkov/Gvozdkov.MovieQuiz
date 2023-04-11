@@ -8,50 +8,50 @@
 import UIKit
 
 class QuestionFactory: QuestionFactoryProtocol {
-/*
+    /*
      let questions: [QuizQuestion] = [
-            QuizQuestion(
-                image: "The Godfather",
-                text: "Рейтинг этого фильма больше чем 6?",
-                correctAnswer: true),
-            QuizQuestion(
-                image: "The Dark Knight",
-                text: "Рейтинг этого фильма больше чем 6?",
-                correctAnswer: true),
-            QuizQuestion(
-                image: "Kill Bill",
-                text: "Рейтинг этого фильма больше чем 6?",
-                correctAnswer: true),
-            QuizQuestion(
-                image: "The Avengers",
-                text: "Рейтинг этого фильма больше чем 6?",
-                correctAnswer: true),
-            QuizQuestion(
-                image: "Deadpool",
-                text: "Рейтинг этого фильма больше чем 6?",
-                correctAnswer: true),
-            QuizQuestion(
-                image: "The Green Knight",
-                text: "Рейтинг этого фильма больше чем 6?",
-                correctAnswer: true),
-            QuizQuestion(
-                image: "Old",
-                text: "Рейтинг этого фильма больше чем 6?",
-                correctAnswer: false),
-            QuizQuestion(
-                image: "The Ice Age Adventures of Buck Wild",
-                text: "Рейтинг этого фильма больше чем 6?",
-                correctAnswer: false),
-            QuizQuestion(
-                image: "Tesla",
-                text: "Рейтинг этого фильма больше чем 6?",
-                correctAnswer: false),
-            QuizQuestion(
-                image: "Vivarium",
-                text: "Рейтинг этого фильма больше чем 6?",
-                correctAnswer: false)
-        ]
-*/
+     QuizQuestion(
+     image: "The Godfather",
+     text: "Рейтинг этого фильма больше чем 6?",
+     correctAnswer: true),
+     QuizQuestion(
+     image: "The Dark Knight",
+     text: "Рейтинг этого фильма больше чем 6?",
+     correctAnswer: true),
+     QuizQuestion(
+     image: "Kill Bill",
+     text: "Рейтинг этого фильма больше чем 6?",
+     correctAnswer: true),
+     QuizQuestion(
+     image: "The Avengers",
+     text: "Рейтинг этого фильма больше чем 6?",
+     correctAnswer: true),
+     QuizQuestion(
+     image: "Deadpool",
+     text: "Рейтинг этого фильма больше чем 6?",
+     correctAnswer: true),
+     QuizQuestion(
+     image: "The Green Knight",
+     text: "Рейтинг этого фильма больше чем 6?",
+     correctAnswer: true),
+     QuizQuestion(
+     image: "Old",
+     text: "Рейтинг этого фильма больше чем 6?",
+     correctAnswer: false),
+     QuizQuestion(
+     image: "The Ice Age Adventures of Buck Wild",
+     text: "Рейтинг этого фильма больше чем 6?",
+     correctAnswer: false),
+     QuizQuestion(
+     image: "Tesla",
+     text: "Рейтинг этого фильма больше чем 6?",
+     correctAnswer: false),
+     QuizQuestion(
+     image: "Vivarium",
+     text: "Рейтинг этого фильма больше чем 6?",
+     correctAnswer: false)
+     ]
+     */
     
     private var movies: [MostPopularMovie] = []
     private let moviesLoader: MoviesLoading
@@ -87,6 +87,9 @@ class QuestionFactory: QuestionFactoryProtocol {
             
             var imageData = Data()
             
+            let questionError = QuizQuestion(image: imageData,
+                                             text: "",
+                                             correctAnswer: true)
             do {
                 imageData = try Data(contentsOf: movie.resizedImageURL)
             } catch {
@@ -99,15 +102,18 @@ class QuestionFactory: QuestionFactoryProtocol {
             let text = "Рейтинг этого фильма \nбольше чем \(Int(randomNumber))?"
             let correctAnswer = rating > randomNumber
             
-            let question = QuizQuestion(image: imageData,
+            var question = QuizQuestion(image: imageData,
                                         text: text,
                                         correctAnswer: correctAnswer)
             
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
-                self.delegate?.didReceiveNextQuestion(question: question)
+                if imageData == Data() {
+                    question = questionError
+                    } else { question = question }
+                    self.delegate?.didReceiveNextQuestion(question: question)
+                }
+                
             }
-            
         }
     }
-}
