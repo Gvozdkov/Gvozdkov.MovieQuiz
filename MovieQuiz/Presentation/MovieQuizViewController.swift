@@ -6,10 +6,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var textLabel: UILabel!
     @IBOutlet private var counterLabel: UILabel!
-    @IBOutlet private var nuButton: UIButton!
+    @IBOutlet private var noButton: UIButton!
     @IBOutlet private var yesButton: UIButton!
     @IBOutlet private var activityIndicator: UIActivityIndicatorView!
    
+  
     
     //MARK: - Private Properties
     private var currentQuestionIndex: Int = 0
@@ -117,14 +118,14 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         } else {
             imageView.layer.borderColor = UIColor.ypRed.cgColor
         }
-        nuButton.isEnabled = false
+        noButton.isEnabled = false
         yesButton.isEnabled = false
     }
     
     
     private func blockShowAnswerResult() {
         imageView.layer.borderWidth = 0
-        nuButton.isEnabled = true
+        noButton.isEnabled = true
         yesButton.isEnabled = true
     }
     
@@ -189,6 +190,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private func showQuizAlert(quiz model: AlertModel) {
         alertPresenter.showAlert(model: model)
     }
+    
+//    @IBAction private func noButtonClicked(_ sender: Any) {
+//
+//    }
     
     
     @IBAction private func yesButtonClickd(_ sender: Any) {
