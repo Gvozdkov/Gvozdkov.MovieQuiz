@@ -25,8 +25,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        returnOnInternetQuestionsLoad()
-        
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         questionFactory?.requestNextQuestion()
         alertPresenter.viewController = self
@@ -34,7 +32,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         
         showLoadingIndicator()
         questionFactory?.loadData()
-        textLabel.textColor = UIColor.yaWhite
 
     }
     
@@ -171,11 +168,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         }
     }
     
-
-    private func returnOnInternetQuestionsLoad() {
-        if questionFactory == nil { showLoadingIndicator() }
-        else { hideLoadingIndicator() }
-    }
     // MARK: - IBActions
             
     @IBAction private func noButtonClicked(_ sender: Any) {
