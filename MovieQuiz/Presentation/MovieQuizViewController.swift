@@ -6,9 +6,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var textLabel: UILabel!
     @IBOutlet private var counterLabel: UILabel!
-    @IBOutlet private var nuButton: UIButton!
+    @IBOutlet private var noButton: UIButton!
     @IBOutlet private var yesButton: UIButton!
-    @IBOutlet var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet private var activityIndicator: UIActivityIndicatorView!
+   
+  
     
     //MARK: - Private Properties
     private var currentQuestionIndex: Int = 0
@@ -22,7 +24,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         questionFactory?.requestNextQuestion()
         alertPresenter.viewController = self
@@ -30,6 +32,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         
         showLoadingIndicator()
         questionFactory?.loadData()
+        textLabel.textColor = UIColor.yaWhite
 
     }
     
@@ -58,6 +61,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
 
     // MARK: - Private methods
+    override var preferredStatusBarStyle: UIStatusBarStyle {  //изменение цвета статус бара
+        return .lightContent
+    }
+    
     
     private func showLoadingIndicator() {
         activityIndicator.isHidden = false // говорим, что индикатор загрузки не скрыт
@@ -74,12 +81,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 
             let model = AlertModel(title: "Ошибка",
                                    message: message,
-                                   buttonText: "Попробывать еще раз") { [weak self] in
+                                   buttonText: "Попробовать еще раз") { [weak self] in
                 guard let self = self else { return }
                 
                 self.currentQuestionIndex = 0
                 self.correctAnswers = 0
-                self.questionFactory?.requestNextQuestion()
+                self.questionFactory?.loadData()
+// !!! должна происходить загрузкас сервера               self.questionFactory?.requestNextQuestion()
         }
         alertPresenter.showAlert(model: model)
     } 
@@ -110,14 +118,14 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         } else {
             imageView.layer.borderColor = UIColor.ypRed.cgColor
         }
-        nuButton.isEnabled = false
+        noButton.isEnabled = false
         yesButton.isEnabled = false
     }
     
     
     private func blockShowAnswerResult() {
         imageView.layer.borderWidth = 0
-        nuButton.isEnabled = true
+        noButton.isEnabled = true
         yesButton.isEnabled = true
     }
     
@@ -182,6 +190,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private func showQuizAlert(quiz model: AlertModel) {
         alertPresenter.showAlert(model: model)
     }
+    
+//    @IBAction private func noButtonClicked(_ sender: Any) {
+//
+//    }
     
     
     @IBAction private func yesButtonClickd(_ sender: Any) {

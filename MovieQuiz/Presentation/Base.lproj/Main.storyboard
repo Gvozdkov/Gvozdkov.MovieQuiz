@@ -26,7 +26,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="8LM-61-c3L">
-                                <rect key="frame" x="20" y="58" width="374" height="824"/>
+                                <rect key="frame" x="20" y="58" width="374" height="784"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="J7J-JW-8VB">
                                         <rect key="frame" x="0.0" y="0.0" width="374" height="23.5"/>
@@ -47,7 +47,7 @@
                                     </stackView>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eyo-Hz-yOl" userLabel="Preview Image">
                                         <rect key="frame" x="0.0" y="43.5" width="374" height="561"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" name="yaDarkGray"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="eyo-Hz-yOl" secondAttribute="height" multiplier="2:3" id="aZ6-vi-PTJ"/>
                                         </constraints>
@@ -58,10 +58,10 @@
                                         </userDefinedRuntimeAttributes>
                                     </imageView>
                                     <view contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="vCT-MT-nuU">
-                                        <rect key="frame" x="0.0" y="624.5" width="374" height="119.5"/>
+                                        <rect key="frame" x="0.0" y="624.5" width="374" height="79.5"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Рейтинг этого фильма меньше, чем 5?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Jb-ao-z0e" userLabel="Question Title">
-                                                <rect key="frame" x="42" y="13" width="290" height="93.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0Jb-ao-z0e" userLabel="Question Title">
+                                                <rect key="frame" x="62" y="10" width="0.0" height="56.5"/>
                                                 <fontDescription key="fontDescription" name="YSDisplay-Bold" family="YS Display" pointSize="23"/>
                                                 <color key="textColor" name="ypWhite"/>
                                                 <nil key="highlightedColor"/>
@@ -69,13 +69,13 @@
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="0Jb-ao-z0e" secondAttribute="bottom" constant="13" id="1Fh-Vm-th8"/>
-                                            <constraint firstItem="0Jb-ao-z0e" firstAttribute="leading" secondItem="vCT-MT-nuU" secondAttribute="leading" constant="42" id="El9-yu-Dbw"/>
-                                            <constraint firstAttribute="trailing" secondItem="0Jb-ao-z0e" secondAttribute="trailing" constant="42" id="Re8-jW-DTP"/>
-                                            <constraint firstItem="0Jb-ao-z0e" firstAttribute="top" secondItem="vCT-MT-nuU" secondAttribute="top" constant="13" id="VZR-gY-fIo"/>
+                                            <constraint firstItem="0Jb-ao-z0e" firstAttribute="leading" secondItem="vCT-MT-nuU" secondAttribute="leading" constant="62" id="El9-yu-Dbw"/>
+                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="0Jb-ao-z0e" secondAttribute="trailing" constant="62" id="Re8-jW-DTP"/>
+                                            <constraint firstItem="0Jb-ao-z0e" firstAttribute="top" secondItem="vCT-MT-nuU" secondAttribute="top" constant="10" id="VZR-gY-fIo"/>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="FMj-aS-K8j">
-                                        <rect key="frame" x="0.0" y="764" width="374" height="60"/>
+                                        <rect key="frame" x="0.0" y="724" width="374" height="60"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fv3-G3-1Ua" userLabel="noButton">
                                                 <rect key="frame" x="0.0" y="0.0" width="177" height="60"/>
@@ -93,7 +93,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="noButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qnR-Pa-8KL"/>
+                                                    <action selector="noButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ybF-Kk-oEz"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dFP-gh-Liw" userLabel="yesButton">
@@ -131,10 +131,10 @@
                         <constraints>
                             <constraint firstItem="vIu-gJ-gwC" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="3H3-go-hJg"/>
                             <constraint firstItem="vIu-gJ-gwC" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Cp3-n1-WI3"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="dFP-gh-Liw" secondAttribute="bottom" constant="20" id="EdF-MB-j9o"/>
                             <constraint firstItem="8LM-61-c3L" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="Pbg-5b-jsp"/>
                             <constraint firstItem="8LM-61-c3L" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="SlY-r2-0Q2"/>
                             <constraint firstItem="vIu-gJ-gwC" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="T18-x6-zgY"/>
-                            <constraint firstItem="vIu-gJ-gwC" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="XQK-CB-2xY"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="8LM-61-c3L" secondAttribute="trailing" constant="20" id="cqg-OA-32C"/>
                         </constraints>
                     </view>
@@ -142,7 +142,7 @@
                         <outlet property="activityIndicator" destination="vIu-gJ-gwC" id="YY1-fL-sHx"/>
                         <outlet property="counterLabel" destination="aX5-9I-WtN" id="7he-4k-0W0"/>
                         <outlet property="imageView" destination="eyo-Hz-yOl" id="Wfz-Fi-wyh"/>
-                        <outlet property="nuButton" destination="Fv3-G3-1Ua" id="liJ-zH-uLd"/>
+                        <outlet property="noButton" destination="Fv3-G3-1Ua" id="H7a-vq-rM8"/>
                         <outlet property="textLabel" destination="0Jb-ao-z0e" id="UFT-LS-PqB"/>
                         <outlet property="yesButton" destination="dFP-gh-Liw" id="uzz-nG-j9T"/>
                     </connections>
@@ -153,6 +153,9 @@
         </scene>
     </scenes>
     <resources>
+        <namedColor name="yaDarkGray">
+            <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="0.60000002384185791" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="ypBlack">
             <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
