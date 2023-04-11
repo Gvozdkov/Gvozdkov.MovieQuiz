@@ -191,10 +191,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         alertPresenter.showAlert(model: model)
     }
     
-//    @IBAction private func noButtonClicked(_ sender: Any) {
-//
-//    }
-    
     
     @IBAction private func yesButtonClickd(_ sender: Any) {
         let answer: Bool = true
