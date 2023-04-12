@@ -68,10 +68,10 @@
                                             </label>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="0Jb-ao-z0e" secondAttribute="bottom" constant="5" id="1Fh-Vm-th8"/>
+                                            <constraint firstAttribute="bottom" secondItem="0Jb-ao-z0e" secondAttribute="bottom" id="1Fh-Vm-th8"/>
                                             <constraint firstItem="0Jb-ao-z0e" firstAttribute="leading" secondItem="vCT-MT-nuU" secondAttribute="leading" constant="42" id="El9-yu-Dbw"/>
                                             <constraint firstAttribute="trailing" secondItem="0Jb-ao-z0e" secondAttribute="trailing" constant="42" id="Re8-jW-DTP"/>
-                                            <constraint firstItem="0Jb-ao-z0e" firstAttribute="top" secondItem="vCT-MT-nuU" secondAttribute="top" constant="5" id="VZR-gY-fIo"/>
+                                            <constraint firstItem="0Jb-ao-z0e" firstAttribute="top" secondItem="vCT-MT-nuU" secondAttribute="top" id="VZR-gY-fIo"/>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="FMj-aS-K8j">
