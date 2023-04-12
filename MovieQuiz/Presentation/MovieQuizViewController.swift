@@ -121,14 +121,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     
-    private func blockShowAnswerResult() {
+    private func showNextQuestionOrResults() {
         imageView.layer.borderWidth = 0
         noButton.isEnabled = true
         yesButton.isEnabled = true
-    }
-    
-
-    private func showNextQuestionOrResults() {
+        
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 0
 
@@ -180,10 +177,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             guard let self = self else { return }
             self.showNextQuestionOrResults()
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in        // задержка вывода в 1 секунду
-            guard let self = self else { return }
-            self.blockShowAnswerResult()
-        }
     }
     
     private func showQuizAlert(quiz model: AlertModel) {
@@ -200,10 +193,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
             self.showNextQuestionOrResults()
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self = self else { return }
-            self.blockShowAnswerResult()
         }
     }
     
