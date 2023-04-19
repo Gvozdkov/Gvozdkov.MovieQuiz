@@ -15,6 +15,7 @@ final class MovieQuizUITests: XCTestCase {
         try super.setUpWithError()
         
         app = XCUIApplication()
+        app.launch()
         
         continueAfterFailure = false  // специальная настройка для тестов: если один тест не прошел, то следующий тест не будет запускаться
     }
@@ -27,9 +28,24 @@ final class MovieQuizUITests: XCTestCase {
     }
     
     func testYesButton() {
+        sleep(3)
+        
         let firstPoster = app.images["Poster"]
+        let firstPosterData = firstPoster.screenshot().pngRepresentation
+        
         app.buttons["Yes"].tap()
+        sleep(3)
+        
         let secondPoster = app.images["Poster"]
-        XCTAssertFalse(firstPoster == secondPoster)
+        let secondPosterData = secondPoster.screenshot().pngRepresentation
+
+        XCTAssertFalse(firstPosterData == secondPosterData)
+    }
+    
+    func testIndexLabel() {
+        let indexLabel = app.staticTexts["Index"]
+        
+        XCTAssertEqual(indexLabel.label, "2/10")
+        
     }
 }
