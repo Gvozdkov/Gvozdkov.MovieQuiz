@@ -6,7 +6,6 @@
 //
 
 import XCTest
-@testable import MovieQuiz
 
 final class MovieQuizUITests: XCTestCase {
     
@@ -27,9 +26,10 @@ final class MovieQuizUITests: XCTestCase {
         app = nil
     }
     
-    
- 
-    func testScreenCast() throws {
-
+    func testYesButton() {
+        let firstPoster = app.images["Poster"]
+        app.buttons["Yes"].tap()
+        let secondPoster = app.images["Poster"]
+        XCTAssertFalse(firstPoster == secondPoster)
     }
 }
