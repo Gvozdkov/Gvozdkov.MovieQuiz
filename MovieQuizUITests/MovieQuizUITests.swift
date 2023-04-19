@@ -42,7 +42,7 @@ final class MovieQuizUITests: XCTestCase {
         XCTAssertFalse(firstPosterData == secondPosterData)
     }
     
-    func testNiBurron() {
+    func testNBurron() {
         sleep(3)
         
         let firstPoster = app.images["Poster"]
@@ -58,6 +58,30 @@ final class MovieQuizUITests: XCTestCase {
         
         XCTAssertNotEqual(firstPosterData, secondPosterData)
         XCTAssertEqual(indexLabel.label, "2/10")
+    }
+    
+    func testAlertsFinal() {
+        sleep(3)
+        
+        for _ in 1...5 {
+            app.buttons["Yes"].tap()
+            sleep(2)
+        }
+        
+        for _ in 1...5 {
+            app.buttons["No"].tap()
+            sleep(2)
+        }
+        
+        let alert = app.alerts["Alert result"]
+        alert.buttons.firstMatch.tap()
+        
+        sleep(3)
+        
+        let indexLabel = app.staticTexts["Index"]
+        
+        XCTAssertFalse(alert.exists)
+        XCTAssertTrue(indexLabel.label == "1/10")
     }
     
 }
