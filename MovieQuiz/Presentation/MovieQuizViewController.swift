@@ -13,23 +13,21 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
   
     
     //MARK: - Private Properties
-    private var currentQuestionIndex: Int = 0
-    private let questionsAmount: Int =  10                       // общее количество вопросов для квиза
+
     private var correctAnswers: Int = 0                          // правельные ответы
     
     private var currentQuestion: QuizQuestion?                    // текущий вопрос, который видит пользователь.
     private var statisticService: StatisticService?
     private var questionFactory: QuestionFactoryProtocol?        // та самая фабрика вопросов, которую мы создали. Наш                                                          контроллер будет обращаться за вопросами именно к ней.
     private let alertPresenter = AlertPresenter()
+    private let presenter = MovieQuizPresenter()
     // MARK: - Lifecycle
     
-    //V
     override func viewDidLoad() {
         super.viewDidLoad()
         
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
-//        questionFactory?.requestNextQuestion()
-//        alertPresenter.viewController = self
+        alertPresenter.viewController = self
         statisticService = StatisticServiceImplementation()
         
         showLoadingIndicator()
@@ -39,27 +37,24 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     // MARK: - QuestionFactoryDelegate
     
-    //V
     func didReceiveNextQuestion(question: QuizQuestion?) {
         guard let question = question else {
             return
         }
         
         currentQuestion = question
-        let viewModel = convert(model: question)
+        let viewModel = presenter.convert(model: question)
         
         DispatchQueue.main.async { [weak self] in
             self?.show(quiz: viewModel)
         }
     }
     
-    //V
     func didLoadDataFromServer() {
         activityIndicator.isHidden = true
         questionFactory?.requestNextQuestion()
     }
     
-    //V
     func didFailToLoadData(with error: Error) {
         showNetworkError(message: error.localizedDescription)
     }
@@ -70,7 +65,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         return .lightContent
     }
     
-    //V
     private func showLoadingIndicator() {
         activityIndicator.isHidden = false // говорим, что индикатор загрузки не скрыт
         activityIndicator.startAnimating() // включили анимацию
@@ -92,7 +86,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                                    style: .default) { [weak self] _ in
             guard let self = self else { return }
 
-            self.currentQuestionIndex = 0
+            self.presenter.currentQuestionIndex = 0
             self.correctAnswers = 0
 
             self.questionFactory?.requestNextQuestion()
@@ -100,23 +94,14 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 
         alert.addAction(action)
     }
-    
-    //V
-    private func convert(model: QuizQuestion) -> QuizStepViewModel {    // тут конвертируем информацию для экрана в состояние "Вопрос задан"
-        return QuizStepViewModel(
-            image: UIImage(data: model.image) ?? UIImage(),
-            question: model.text,
-            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
-    }
-    
-    //V
+ 
+
     private func show(quiz step: QuizStepViewModel) {           // здесь мы заполняем нашу картинку, текст и счётчик данными
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
     }
     
-    //V
     private func showAnswerResult(isCorrect: Bool) {           // здесь показываем результат ответа в виде рамки зеленой
         
         imageView.layer.masksToBounds = true                   // даём разрешение на рисование рамки
@@ -138,17 +123,16 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         noButton.isEnabled = true
         yesButton.isEnabled = true
     }
-    
-    //V
+
     private func show(quiz result: QuizResultsViewModel) {
         var message = result.text
         if let statisticService = statisticService {
-            statisticService.store(correct: correctAnswers, total: questionsAmount)
+            statisticService.store(correct: correctAnswers, total: presenter.questionsAmount)
             
             let bestGame = statisticService.bestGame
             
             let totalPlaysCountLine = "Количество сыгранных квизов: \(statisticService.gamesCount)"
-            let currentGameResultLine = "Ваш результат: \(correctAnswers)\\\(questionsAmount)"
+            let currentGameResultLine = "Ваш результат: \(correctAnswers)\\\(presenter.questionsAmount)"
             let bestGameInfoLine = "Рекорд: \(bestGame.correct)\\\(bestGame.total)"
             + " (\(bestGame.date.dateTimeString))"
             let averageAccuracyLine = "Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%"
@@ -163,18 +147,18 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         let model = AlertModel(title: result.title, message: message, buttonText: result.buttonText) { [weak self] in
             guard let self = self else { return }
             
-            self.currentQuestionIndex = 0
+            self.presenter.currentQuestionIndex = 0
             self.correctAnswers = 0
             
             self.questionFactory?.requestNextQuestion()
         }
         
-        alertPresenter.showAlert(in: self, model: model)
+        alertPresenter.showAlert(model: model)
     }
     
-    //V
     private func showNextQuestionOrResults() {
-        if currentQuestionIndex == questionsAmount - 1 {
+        blockButton()
+        if presenter.currentQuestionIndex == presenter.questionsAmount - 1 {
             let text = "Вы ответили на \(correctAnswers) из 10, попробуйте еще раз!"
 
             let viewModel = QuizResultsViewModel(
@@ -183,7 +167,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
                 buttonText: "Сыграть ещё раз")
             show(quiz: viewModel)
         } else {
-            currentQuestionIndex += 1
+            presenter.currentQuestionIndex += 1
             questionFactory?.requestNextQuestion()
         }
     }
@@ -236,37 +220,28 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 //        alertPresenter.showAlert(model: model)
 //    }
 //
+    func blockButton() {
+        noButton.isEnabled = true
+        yesButton.isEnabled = true
+        imageView.layer.borderWidth = 0
+    }
     
     // MARK: - IBActions
-    //V
+
     @IBAction private func noButtonClicked(_ sender: UIButton) {
         guard let currentQuestion = currentQuestion else {
             return
         }
         let answer: Bool = false
         showAnswerResult(isCorrect: answer == currentQuestion.correctAnswer)
-//        guard let answerTheQuestion = currentQuestion else {
-//            return
-//        }
-//        showAnswerResult(isCorrect: answer == answerTheQuestion.correctAnswer)
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in        // задержка вывода в 1 секунду. Делаем слабую ссылку и распаковываем через guard
-//            guard let self = self else { return }
-//            self.showNextQuestionOrResults()
-//        }
     }
     
-    //V
+
     @IBAction private func yesButtonClickd(_ sender: UIButton) {
         guard let currentQuestion = currentQuestion else {
             return
         }
         let answer: Bool = true
-        
-//        showAnswerResult(isCorrect: answer == answerTheQuestion.correctAnswer)
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-//            guard let self = self else { return }
-//            self.showNextQuestionOrResults()
-//        }
         showAnswerResult(isCorrect: answer == currentQuestion.correctAnswer)
     }
     

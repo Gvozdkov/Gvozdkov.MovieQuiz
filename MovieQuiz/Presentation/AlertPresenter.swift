@@ -9,24 +9,19 @@ import UIKit
 
 class AlertPresenter {
     
-//    weak var viewController: UIViewController?
+    weak var viewController: UIViewController?
     
-    func showAlert(in vs: UIViewController, model: AlertModel) {
+    func showAlert(model: AlertModel) {
         let alert = UIAlertController(title: model.title,
                                       message: model.message,
                                       preferredStyle:  .alert)
         
         let action = UIAlertAction(title: model.buttonText,
                                    style: .default) { _ in
-            
-            model.completion()
-//            model.completion?()
+            model.completion?()
         }
-//        alert.view.accessibilityIdentifier = "Alert result"
-//        alert.addAction(action)
-//        viewController?.present(alert, animated: true)
         alert.addAction(action)
-        vs.present(alert, animated: true, completion: nil)
+        viewController?.present(alert, animated: true)
     }
 }
 
