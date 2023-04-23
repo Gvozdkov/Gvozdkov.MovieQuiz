@@ -88,7 +88,7 @@ final class MovieQuizViewController: UIViewController {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
-            self.showNextQuestionOrResults()
+            self.presenter.showNextQuestionOrResults()
         }
         noButton.isEnabled = false
         yesButton.isEnabled = false
@@ -126,29 +126,32 @@ final class MovieQuizViewController: UIViewController {
         alertPresenter.showAlert(model: model)
     }
     
-    func showNextQuestionOrResults() {
-        noButton.isEnabled = true
-        yesButton.isEnabled = true
-        imageView.layer.borderWidth = 0
-        
-        if presenter.currentQuestionIndex == presenter.questionsAmount - 1 {
-            let text = "Вы ответили на \(presenter.correctAnswers) из 10, попробуйте еще раз!"
-            
-            let viewModel = QuizResultsViewModel(
-                title: "Этот раунд окончен!",
-                text: text,
-                buttonText: "Сыграть ещё раз")
-            presenter.viewController?.show(quiz: viewModel)
-        } else {
-            presenter.currentQuestionIndex += 1
-            presenter.questionFactory?.requestNextQuestion()
-        }
-    }
+//    func showNextQuestionOrResults() {
+//        blockButtons()
+//        
+//        if presenter.currentQuestionIndex == presenter.questionsAmount - 1 {
+//            let text = "Вы ответили на \(presenter.correctAnswers) из 10, попробуйте еще раз!"
+//            
+//            let viewModel = QuizResultsViewModel(
+//                title: "Этот раунд окончен!",
+//                text: text,
+//                buttonText: "Сыграть ещё раз")
+//            presenter.viewController?.show(quiz: viewModel)
+//        } else {
+//            presenter.currentQuestionIndex += 1
+//            presenter.questionFactory?.requestNextQuestion()
+//        }
+//    }
     
     func didReceiveNextQuestion(question: QuizQuestion?) {
         presenter.didReceiveNextQuestion(question: question)
     }
     
+    func blockButtons() {
+        noButton.isEnabled = true
+        yesButton.isEnabled = true
+        imageView.layer.borderWidth = 0
+    }
     
     // MARK: - IBActions
     

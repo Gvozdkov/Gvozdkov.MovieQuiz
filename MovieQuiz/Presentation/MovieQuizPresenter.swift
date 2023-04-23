@@ -73,6 +73,8 @@
 //    
 //}
 
+
+
 import UIKit
 
 final class MovieQuizPresenter: QuestionFactoryDelegate {
@@ -95,44 +97,59 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     }
     
     func didReceiveNextQuestion(question: QuizQuestion?) {
-            guard let question = question else {
-                return
-            }
-            
-            currentQuestion = question
-            let viewModel = convert(model: question)
-            
-            DispatchQueue.main.async { [weak self] in
-                self?.viewController?.show(quiz: viewModel)
-            }
+        guard let question = question else {
+            return
         }
+        
+        currentQuestion = question
+        let viewModel = convert(model: question)
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.viewController?.show(quiz: viewModel)
+        }
+    }
     //MARK: - Methods
-        
-        func convert(model: QuizQuestion) -> QuizStepViewModel {    // тут конвертируем информацию для экрана в состояние "Вопрос задан"
-                return QuizStepViewModel(
-                    image: UIImage(data: model.image) ?? UIImage(),
-                    question: model.text,
-                    questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
-            }
-
-        func didAnswerClicked(isYes: Bool) {
-                guard let currentQuestion = currentQuestion else {
-                    return
-                }
-                let givanAnswer = isYes
-                viewController?.showAnswerResult(isCorrect: givanAnswer == currentQuestion.correctAnswer)
-            }
-
-        
-        
-        func yesButtonClicked() {
-            didAnswerClicked(isYes: true)
-        }
-        
-        func noButtonClicked() {
-            didAnswerClicked(isYes: false)
-        }
-
-        
+    
+    func convert(model: QuizQuestion) -> QuizStepViewModel {    // тут конвертируем информацию для экрана в состояние "Вопрос задан"
+        return QuizStepViewModel(
+            image: UIImage(data: model.image) ?? UIImage(),
+            question: model.text,
+            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
     }
     
+    func didAnswerClicked(isYes: Bool) {
+        guard let currentQuestion = currentQuestion else {
+            return
+        }
+        let givanAnswer = isYes
+        viewController?.showAnswerResult(isCorrect: givanAnswer == currentQuestion.correctAnswer)
+    }
+    func showNextQuestionOrResults() {
+        viewController?.blockButtons()
+        
+        if currentQuestionIndex == questionsAmount - 1 {
+            let text = "Вы ответили на \(correctAnswers) из 10, попробуйте еще раз!"
+            
+            let viewModel = QuizResultsViewModel(
+                title: "Этот раунд окончен!",
+                text: text,
+                buttonText: "Сыграть ещё раз")
+            viewController?.show(quiz: viewModel)
+        } else {
+            currentQuestionIndex += 1
+            questionFactory?.requestNextQuestion()
+        }
+    }
+    
+    
+    func yesButtonClicked() {
+        didAnswerClicked(isYes: true)
+    }
+    
+    func noButtonClicked() {
+        didAnswerClicked(isYes: false)
+    }
+    
+    
+}
+
