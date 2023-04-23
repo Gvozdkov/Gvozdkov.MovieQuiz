@@ -15,14 +15,14 @@ final class MovieQuizViewController: UIViewController {
     //MARK: - Private Properties
     var statisticService: StatisticService?
     let alertPresenter = AlertPresenter()
-    private let presenter = MovieQuizPresenter()
+    private var presenter: MovieQuizPresenter!
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         alertPresenter.viewController = self
-        presenter.viewController = self
+        presenter = MovieQuizPresenter(viewController: self)
         
         presenter.questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: presenter.self)
         statisticService = StatisticServiceImplementation()
@@ -125,23 +125,6 @@ final class MovieQuizViewController: UIViewController {
         
         alertPresenter.showAlert(model: model)
     }
-    
-//    func showNextQuestionOrResults() {
-//        blockButtons()
-//        
-//        if presenter.currentQuestionIndex == presenter.questionsAmount - 1 {
-//            let text = "Вы ответили на \(presenter.correctAnswers) из 10, попробуйте еще раз!"
-//            
-//            let viewModel = QuizResultsViewModel(
-//                title: "Этот раунд окончен!",
-//                text: text,
-//                buttonText: "Сыграть ещё раз")
-//            presenter.viewController?.show(quiz: viewModel)
-//        } else {
-//            presenter.currentQuestionIndex += 1
-//            presenter.questionFactory?.requestNextQuestion()
-//        }
-//    }
     
     func didReceiveNextQuestion(question: QuizQuestion?) {
         presenter.didReceiveNextQuestion(question: question)
