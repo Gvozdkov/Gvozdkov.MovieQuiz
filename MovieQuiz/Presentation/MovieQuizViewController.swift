@@ -13,12 +13,7 @@ final class MovieQuizViewController: UIViewController {
     
     
     //MARK: - Private Properties
-    
-//    private var correctAnswers: Int = 0                          // правельные ответы
-    
-//    private var currentQuestion: QuizQuestion?                    // текущий вопрос, который видит пользователь.
-     var statisticService: StatisticService?
-//    private var questionFactory: QuestionFactoryProtocol?        // та самая фабрика вопросов, которую мы создали. Наш                                                          контроллер будет обращаться за вопросами именно к ней.
+    var statisticService: StatisticService?
     let alertPresenter = AlertPresenter()
     private let presenter = MovieQuizPresenter()
     // MARK: - Lifecycle
@@ -33,34 +28,9 @@ final class MovieQuizViewController: UIViewController {
         statisticService = StatisticServiceImplementation()
         showLoadingIndicator()
         presenter.questionFactory?.loadData()
-
+        
     }
-    
-
-    
-//    func didReceiveNextQuestion(question: QuizQuestion?) {
-//        guard let question = question else {
-//            return
-//        }
-//        
-//        presenter.currentQuestion = question
-//        let viewModel = presenter.convert(model: question)
-//        
-//        DispatchQueue.main.async { [weak self] in
-//            self?.show(quiz: viewModel)
-//        }
-//    }
-//    
-//    func didLoadDataFromServer() {
-//        presenter.questionFactory?.requestNextQuestion()
-//    }
-//
-//    func didFailToLoadData(with error: Error) {
-//        showNetworkError(message: error.localizedDescription)
-//    }
-    
-    
-    // MARK: - Private methods
+    // MARK: - Methods
     override var preferredStatusBarStyle: UIStatusBarStyle {  //изменение цвета статус бара
         return .lightContent
     }
@@ -118,7 +88,7 @@ final class MovieQuizViewController: UIViewController {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
-            self.presenter.showNextQuestionOrResults()
+            self.showNextQuestionOrResults()
         }
         noButton.isEnabled = false
         yesButton.isEnabled = false
@@ -156,11 +126,56 @@ final class MovieQuizViewController: UIViewController {
         alertPresenter.showAlert(model: model)
     }
     
+    func showNextQuestionOrResults() {
+        noButton.isEnabled = true
+        yesButton.isEnabled = true
+        imageView.layer.borderWidth = 0
+        
+        if presenter.currentQuestionIndex == presenter.questionsAmount - 1 {
+            let text = "Вы ответили на \(presenter.correctAnswers) из 10, попробуйте еще раз!"
+            
+            let viewModel = QuizResultsViewModel(
+                title: "Этот раунд окончен!",
+                text: text,
+                buttonText: "Сыграть ещё раз")
+            presenter.viewController?.show(quiz: viewModel)
+        } else {
+            presenter.currentQuestionIndex += 1
+            presenter.questionFactory?.requestNextQuestion()
+        }
+    }
+    
+    func didReceiveNextQuestion(question: QuizQuestion?) {
+        presenter.didReceiveNextQuestion(question: question)
+    }
+    
+    
+    // MARK: - IBActions
+    
+    @IBAction func noButtonClicked(_ sender: UIButton) {
+        presenter.noButtonClicked()
+    }
+    
+    
+    @IBAction private func yesButtonClickd(_ sender: UIButton) {
+        presenter.yesButtonClicked()
+    }
+}
+
+
+// MARK: - Мусор
+//    private var correctAnswers: Int = 0                          // правельные ответы
+
+//    private var currentQuestion: QuizQuestion?                    // текущий вопрос, который видит пользователь.
+ 
+//    private var questionFactory: QuestionFactoryProtocol?        // та самая фабрика вопросов, которую мы создали. Наш                                                          контроллер будет обращаться за вопросами именно к ней.
+
+
 //    func showNextQuestionOrResults() {
 //        blockButton()
 //        if presenter.currentQuestionIndex == presenter.questionsAmount - 1 {
 //            let text = "Вы ответили на \(correctAnswers) из 10, попробуйте еще раз!"
-//            
+//
 //            let viewModel = QuizResultsViewModel(
 //                title: "Этот раунд окончен!",
 //                text: text,
@@ -221,25 +236,27 @@ final class MovieQuizViewController: UIViewController {
     //    }
     //
     
-    func didReceiveNextQuestion(question: QuizQuestion?) {
-        presenter.didReceiveNextQuestion(question: question)
-    }
 
-    
-    func blockButton() {
-        noButton.isEnabled = true
-        yesButton.isEnabled = true
-        imageView.layer.borderWidth = 0
-    }
-    
-    // MARK: - IBActions
-    
-    @IBAction func noButtonClicked(_ sender: UIButton) {
-        presenter.noButtonClicked()
-    }
-    
-    
-    @IBAction private func yesButtonClickd(_ sender: UIButton) {
-        presenter.yesButtonClicked()
-    }
-}
+
+
+//    func didReceiveNextQuestion(question: QuizQuestion?) {
+//        guard let question = question else {
+//            return
+//        }
+//
+//        presenter.currentQuestion = question
+//        let viewModel = presenter.convert(model: question)
+//
+//        DispatchQueue.main.async { [weak self] in
+//            self?.show(quiz: viewModel)
+//        }
+//    }
+//
+//    func didLoadDataFromServer() {
+//        presenter.questionFactory?.requestNextQuestion()
+//    }
+//
+//    func didFailToLoadData(with error: Error) {
+//        showNetworkError(message: error.localizedDescription)
+//    }
+

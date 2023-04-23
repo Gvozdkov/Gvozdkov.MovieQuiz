@@ -107,25 +107,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             }
         }
     //MARK: - Methods
-    func showNextQuestionOrResults() {
-            viewController?.blockButton()
-            
-            if currentQuestionIndex == questionsAmount - 1 {
-                let text = "Вы ответили на \(correctAnswers) из 10, попробуйте еще раз!"
-                
-                let viewModel = QuizResultsViewModel(
-                   title: "Этот раунд окончен!",
-                   text: text,
-                   buttonText: "Сыграть ещё раз")
-                   viewController?.show(quiz: viewModel)
-            } else {
-                currentQuestionIndex += 1
-                questionFactory?.requestNextQuestion()
-            }
-        }
-
         
-
         func convert(model: QuizQuestion) -> QuizStepViewModel {    // тут конвертируем информацию для экрана в состояние "Вопрос задан"
                 return QuizStepViewModel(
                     image: UIImage(data: model.image) ?? UIImage(),
