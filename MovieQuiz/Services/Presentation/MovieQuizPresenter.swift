@@ -132,6 +132,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             
             return resultMessage
     }
+
     
     func yesButtonClicked() {
         didAnswerClicked(isYes: true)

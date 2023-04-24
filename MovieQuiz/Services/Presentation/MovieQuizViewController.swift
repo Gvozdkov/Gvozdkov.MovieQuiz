@@ -90,6 +90,8 @@ final class MovieQuizViewController: UIViewController {
         imageView.layer.borderWidth = 0
     }
     
+    
+    
     // MARK: - IBActions
     
     @IBAction private func noButtonClicked(_ sender: UIButton) {
