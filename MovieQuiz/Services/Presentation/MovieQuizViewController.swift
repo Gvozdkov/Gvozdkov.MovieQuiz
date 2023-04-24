@@ -1,6 +1,6 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController {
+final class MovieQuizViewController: UIViewController, MovieQuizViewControllerProtocol {
     
     // MARK: - IBOutlet
     @IBOutlet private var imageView: UIImageView!
@@ -89,7 +89,7 @@ final class MovieQuizViewController: UIViewController {
         yesButton.isEnabled = onOf
         imageView.layer.borderWidth = 0
     }
-    
+
     
     
     // MARK: - IBActions
