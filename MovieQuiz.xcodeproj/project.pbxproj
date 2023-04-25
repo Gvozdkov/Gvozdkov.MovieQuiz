@@ -220,6 +220,7 @@
 			children = (
 				E7B63F8229BF90E000C1D02F /* Models */,
 				E7B63F7F29BF7CFB00C1D02F /* Services */,
+				8F4738322848DE2A005DF65E /* Presentation */,
 				ADF0CF75283FDAA10075F54D /* Helpers */,
 				8F4738332848DE46005DF65E /* Resources */,
 				AD1ABAB12831907B00B3E448 /* AppDelegate.swift */,
@@ -274,7 +275,6 @@
 				E71DC00029CDAD2A00924B28 /* StatisticServiceProtocol.swift */,
 				E7FAFA3629D9CAAA0011EC73 /* NetworkClient.swift */,
 				E7FAFA3A29DA12900011EC73 /* MoviesLoader.swift */,
-				8F4738322848DE2A005DF65E /* Presentation */,
 			);
 			path = Services;
 			sourceTree = "<group>";
