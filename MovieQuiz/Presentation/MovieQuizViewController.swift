@@ -10,7 +10,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     @IBOutlet private var yesButton: UIButton!
     @IBOutlet private var activityIndicator: UIActivityIndicatorView!
 
-    private var presenter: MovieQuizPresenter!
+    private var presenter: QuestionFactoryDelegate?
 
     // MARK: - Lifecycle
     
@@ -31,7 +31,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     }
     
     func show(quiz result: QuizResultsViewModel) {
-        let message = presenter.makeResultsMessage()
+        let message = presenter?.makeResultsMessage()
         
         let alert = UIAlertController(
             title: result.title,
@@ -41,7 +41,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         let action = UIAlertAction(title: result.buttonText, style: .default) { [weak self] _ in
             guard let self = self else { return }
             
-            self.presenter.restartGame()
+            self.presenter?.restartGame()
         }
         
         alert.addAction(action)
@@ -78,7 +78,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
                                    style: .default) { [weak self] _ in
             guard let self = self else { return }
             
-            self.presenter.restartGame()
+            self.presenter?.restartGame()
         }
         
         alert.addAction(action)
@@ -95,10 +95,10 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     // MARK: - IBActions
     
     @IBAction private func noButtonClicked(_ sender: UIButton) {
-        presenter.noButtonClicked()
+        presenter?.noButtonClicked()
     }
     
     @IBAction private func yesButtonClickd(_ sender: UIButton) {
-        presenter.yesButtonClicked()
+        presenter?.yesButtonClicked()
     }
 }
