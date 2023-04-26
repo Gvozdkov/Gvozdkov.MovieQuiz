@@ -7,11 +7,11 @@
 
 import Foundation
 
-private enum Keys: String {
-    case correct, total, bestGame, gamesCount
-}
-
 final class StatisticServiceImplementation: StatisticService {
+    private enum Keys: String {
+        case correct, total, bestGame, gamesCount
+    }
+    
     private let userDefaults = UserDefaults.standard
     
     private var correct: Double {
@@ -32,7 +32,7 @@ final class StatisticServiceImplementation: StatisticService {
         }
     }
     
-    var bestGame: GameRecord {
+    private(set) var bestGame: GameRecord {
         get {
             guard let data = userDefaults.data(forKey: Keys.bestGame.rawValue),
                   let record = try? JSONDecoder().decode(GameRecord.self, from: data) else {
@@ -49,7 +49,7 @@ final class StatisticServiceImplementation: StatisticService {
         }
     }
     
-    var gamesCount: Int {
+   private(set) var gamesCount: Int {
         get {
             userDefaults.integer(forKey: Keys.gamesCount.rawValue)
         }
@@ -59,11 +59,7 @@ final class StatisticServiceImplementation: StatisticService {
     }
     
     var totalAccuracy: Double {
-        get {
-            total == 0
-            ? 0
-            : correct / total * 100
-        }
+        Double(correct) / Double(total) * 100
     }
 
     func store(correct count: Int, total amount: Int) {
@@ -82,6 +78,5 @@ final class StatisticServiceImplementation: StatisticService {
         correct += Double(currentGame.correct)
         total += Double(currentGame.total)
     }
-
 
 }
