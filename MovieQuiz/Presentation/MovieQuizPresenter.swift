@@ -120,11 +120,9 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             statisticService.store(correct: correctAnswers, total: questionsAmount)
             
             let bestGame = statisticService.bestGame
-            
-            let totalPlaysCountLine = "Количество сыгранных квизов: \(statisticService.gamesCount)"
             let currentGameResultLine = "Ваш результат: \(correctAnswers)/\(questionsAmount)"
-            let bestGameInfoLine = "Рекорд: \(bestGame.correct)/\(bestGame.total)"
-            + " (\(bestGame.date.dateTimeString))"
+            let totalPlaysCountLine = "Количество сыгранных квизов: \(statisticService.gamesCount)"
+            let bestGameInfoLine = "Рекорд: \(bestGame.correct)/\(bestGame.total) (\(bestGame.date.dateTimeString))"
             let averageAccuracyLine = "Средняя точность: \(String(format: "%.2f", statisticService.totalAccuracy))%"
             
             let resultMessage = [
@@ -133,7 +131,6 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             
             return resultMessage
     }
-
     
     func yesButtonClicked() {
         didAnswerClicked(isYes: true)
