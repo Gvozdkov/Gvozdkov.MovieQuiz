@@ -9,8 +9,6 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     @IBOutlet private var noButton: UIButton!
     @IBOutlet private var yesButton: UIButton!
     @IBOutlet private var activityIndicator: UIActivityIndicatorView!
-    
-//    private var presenter: MovieQuizPresenter!
 
     private var presenter: MovieQuizPresenter!
 
